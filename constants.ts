@@ -1,7 +1,9 @@
 export const BUNNY_URL = 'https://pixijs.io/pixi-react/img/bunny.png';
+export const BACKGROUND_TEXTURE = 'https://pixijs.com/assets/p2.jpeg';
 
-export const DISTANCE_PER_MOVE = 25;
-export const DISTANCE_PER_TICK = 5;
+export const SPEED = 10;
+export const MIN_SPEED = SPEED * 0.5;
+export const MAX_SPEED = SPEED * 2;
 
 export const UP_KEYS = ['ArrowUp', 'w'];
 export const DOWN_KEYS = ['ArrowDown', 's'];

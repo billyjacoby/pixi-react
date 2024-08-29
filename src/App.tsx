@@ -1,16 +1,32 @@
 import React from 'react';
 import './App.css';
 import { Stage } from '@pixi/react';
-import { Tutorial } from './Tutorial';
-import { Explosion } from './Explosion';
+import { World } from './World';
 
 const App = () => {
-  React.useEffect(() => {}, []);
+  const [stageSize, setStageSize] = React.useState({ width: 800, height: 600 });
+  console.log('🪵 | App | stageSize:', stageSize);
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      setStageSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
-    <Stage width={800} height={600} options={{ background: 0x1099bb }}>
-      <Tutorial />
-      <Explosion />
+    <Stage
+      width={stageSize.width}
+      height={stageSize.height}
+      options={{ backgroundColor: 0x1099bb }}
+    >
+      <World stageSize={stageSize} />
     </Stage>
   );
 };

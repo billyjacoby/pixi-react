@@ -11,6 +11,9 @@ importers:
       '@pixi/react':
         specifier: '7'
         version: 7.1.2(afngahlqq5ajaitnmeszh2nhbi)
+      pixi-viewport:
+        specifier: ^5.0.3
+        version: 5.0.3
       pixi.js:
         specifier: '7'
         version: 7.4.2
@@ -1202,6 +1205,9 @@ packages:
   picomatch@2.3.1:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}
     engines: {node: '>=8.6'}
+
+  pixi-viewport@5.0.3:
+    resolution: {integrity: sha512-DGG7cg2vUltAiL2fanzYPLR+L6qBeoskPfbUXxN6CYKW+fkni5cF9J1t2WBTmyBnC3kVq3ATFE2KDi7zy2FY8A==}
 
   pixi.js@7.4.2:
     resolution: {integrity: sha512-TifqgHGNofO7UCEbdZJOpUu7dUnpu4YZ0o76kfCqxDa4RS8ITc9zjECCbtalmuNXkVhSEZmBKQvE7qhHMqw/xg==}
@@ -2509,6 +2515,8 @@ snapshots:
   picocolors@1.0.1: {}
 
   picomatch@2.3.1: {}
+
+  pixi-viewport@5.0.3: {}
 
   pixi.js@7.4.2:
     dependencies:
