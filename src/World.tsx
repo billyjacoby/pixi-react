@@ -38,7 +38,7 @@ export const World: React.FC<WorldProps> = ({ stageSize }) => {
       backgroundTexture={BACKGROUND_TEXTURE}
     >
       <Explosion />
-      <Character ref={spriteRef} worldSize={worldSize} />
+      <Character ref={spriteRef} worldSize={worldSize} stageSize={stageSize} />
     </PixiViewportComponent>
   );
 };

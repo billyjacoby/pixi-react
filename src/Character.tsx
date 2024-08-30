@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import * as PIXI from 'pixi.js';
-import { Sprite, useApp, useTick } from '@pixi/react';
+import { Sprite, useTick } from '@pixi/react';
 import {
   BUNNY_URL,
   UP_KEYS,
@@ -14,9 +14,11 @@ import {
 
 export const Character = React.forwardRef<
   PIXI.Sprite,
-  { worldSize: { width: number; height: number } }
->(({ worldSize }, ref) => {
-  const app = useApp();
+  {
+    worldSize: { width: number; height: number };
+    stageSize: { width: number; height: number };
+  }
+>(({ worldSize, stageSize }, ref) => {
   const keysPressed = useRef<Set<string>>(new Set());
 
   const [initialTouchPosition, setInitialTouchPosition] = React.useState<{
@@ -29,8 +31,8 @@ export const Character = React.forwardRef<
   } | null>(null);
 
   const [position, setPosition] = React.useState({
-    x: app.screen.width / 2,
-    y: app.screen.height / 2,
+    x: stageSize.width / 2,
+    y: stageSize.height / 2,
   });
 
   console.log('🪵 | Tutorial | position:', position);
