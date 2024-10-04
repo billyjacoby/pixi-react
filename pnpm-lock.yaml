@@ -11,6 +11,9 @@ importers:
       '@pixi/react':
         specifier: '7'
         version: 7.1.2(afngahlqq5ajaitnmeszh2nhbi)
+      '@pixi/tilemap':
+        specifier: ^4.1.0
+        version: 4.1.0
       pixi-viewport:
         specifier: ^5.0.3
         version: 5.0.3
@@ -577,6 +580,9 @@ packages:
 
   '@pixi/ticker@7.4.2':
     resolution: {integrity: sha512-cAvxCh/KI6IW4m3tp2b+GQIf+DoSj9NNmPJmsOeEJ7LzvruG8Ps7SKI6CdjQob5WbceL1apBTDbqZ/f77hFDiQ==}
+
+  '@pixi/tilemap@4.1.0':
+    resolution: {integrity: sha512-jyc5JqpvPsdsowhkX0VURSMuUd1KdZmG0+Kh11EFGhkrraEKMqTOtU32TPwJb6G0jIqT2o7ynVrG3h5WRoasIg==}
 
   '@pixi/utils@7.4.2':
     resolution: {integrity: sha512-aU/itcyMC4TxFbmdngmak6ey4kC5c16Y5ntIYob9QnjNAfD/7GTsYIBnP6FqEAyO1eq0MjkAALxdONuay1BG3g==}
@@ -1890,6 +1896,8 @@ snapshots:
       '@pixi/extensions': 7.4.2
       '@pixi/settings': 7.4.2
       '@pixi/utils': 7.4.2
+
+  '@pixi/tilemap@4.1.0': {}
 
   '@pixi/utils@7.4.2':
     dependencies:

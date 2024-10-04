@@ -2,14 +2,14 @@ import React, { forwardRef } from 'react';
 import type PIXI from 'pixi.js';
 import { PixiComponent, useApp } from '@pixi/react';
 import { Viewport as PixiViewport } from 'pixi-viewport';
-import { TilingSprite, Texture } from 'pixi.js';
+import { CompositeTilemap } from '@pixi/tilemap';
 
 const PixiComponentViewport = PixiComponent('Viewport', {
   create: ({
     app,
     stageSize,
     worldSize,
-    backgroundTexture,
+    tileMap,
   }: PixiComponentViewportProps) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     app.renderer.events.domElement = app.renderer.view as any;
@@ -25,15 +25,9 @@ const PixiComponentViewport = PixiComponent('Viewport', {
       disableOnContextMenu: true,
     });
 
-    // Create a TilingSprite that covers the entire world
-    const background = new TilingSprite(
-      Texture.from(backgroundTexture),
-      worldSize.width,
-      worldSize.height
-    );
-
-    // Add the background to the viewport
-    viewport.addChild(background);
+    if (tileMap) {
+      viewport.addChild(tileMap);
+    }
 
     viewport
       .drag({
@@ -71,7 +65,7 @@ export interface ViewportProps {
   children?: React.ReactNode;
   stageSize: { width: number; height: number };
   worldSize: { width: number; height: number };
-  backgroundTexture: string;
+  tileMap: CompositeTilemap | null;
 }
 
 export interface PixiComponentViewportProps extends ViewportProps {

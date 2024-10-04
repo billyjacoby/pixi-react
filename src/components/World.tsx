@@ -5,10 +5,10 @@ import { Viewport } from 'pixi-viewport';
 import * as PIXI from 'pixi.js';
 import { Character } from './Character';
 import { Explosion } from './Explosion';
-import { BACKGROUND_TEXTURE } from '../../constants';
 import { levels } from '../lib/map';
 import { gridFromString } from '../lib/grid-utils';
 import { Obstacles } from './Obstacles';
+import { useTilemap } from '../hooks/useTilemap';
 
 interface WorldProps {
   stageSize: { width: number; height: number };
@@ -22,6 +22,8 @@ export const World: React.FC<WorldProps> = ({ stageSize }) => {
   const currentLevel = levels[currentLevelIndex];
 
   const grid = gridFromString(currentLevel.grid);
+
+  const tileMap = useTilemap(grid);
 
   const worldSize = React.useMemo(() => {
     const height = grid.length * 128;
@@ -39,12 +41,17 @@ export const World: React.FC<WorldProps> = ({ stageSize }) => {
     }
   });
 
+  if (!tileMap) {
+    console.log('loading...');
+    return null;
+  }
+
   return (
     <PixiViewportComponent
       ref={viewportRef}
       stageSize={stageSize}
       worldSize={worldSize}
-      backgroundTexture={BACKGROUND_TEXTURE}
+      tileMap={tileMap}
     >
       <Character ref={spriteRef} worldSize={worldSize} grid={grid} />
       <Obstacles grid={grid} />
