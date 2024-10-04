@@ -1,11 +1,14 @@
 import React from 'react';
 import { useTick } from '@pixi/react';
-import PixiViewportComponent from './ViewportComponent';
+import PixiViewportComponent from '../ViewportComponent';
 import { Viewport } from 'pixi-viewport';
 import * as PIXI from 'pixi.js';
 import { Character } from './Character';
 import { Explosion } from './Explosion';
-import { BACKGROUND_TEXTURE } from '../constants';
+import { BACKGROUND_TEXTURE } from '../../constants';
+import { levels } from '../lib/map';
+import { gridFromString } from '../lib/grid-utils';
+import { Obstacles } from './Obstacles';
 
 interface WorldProps {
   stageSize: { width: number; height: number };
@@ -15,10 +18,16 @@ export const World: React.FC<WorldProps> = ({ stageSize }) => {
   const viewportRef = React.useRef<Viewport>(null);
   const spriteRef = React.useRef<PIXI.Sprite>(null);
 
-  const [worldSize] = React.useState({
-    width: stageSize.width * 5,
-    height: stageSize.height * 5,
-  });
+  const [currentLevelIndex] = React.useState(0);
+  const currentLevel = levels[currentLevelIndex];
+
+  const grid = gridFromString(currentLevel.grid);
+
+  const worldSize = React.useMemo(() => {
+    const height = grid.length * 128;
+    const width = grid[0].length * 128;
+    return { width, height };
+  }, [grid]);
 
   //? This handles keeping the viewport centered on the sprite
   useTick(() => {
@@ -37,8 +46,9 @@ export const World: React.FC<WorldProps> = ({ stageSize }) => {
       worldSize={worldSize}
       backgroundTexture={BACKGROUND_TEXTURE}
     >
+      <Character ref={spriteRef} worldSize={worldSize} grid={grid} />
+      <Obstacles grid={grid} />
       <Explosion />
-      <Character ref={spriteRef} worldSize={worldSize} stageSize={stageSize} />
     </PixiViewportComponent>
   );
 };

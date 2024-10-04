@@ -28,7 +28,6 @@ export const Explosion = () => {
   }, []);
 
   if (textures.length === 0) {
-    console.log('🪵 | return null');
     return null; // or a loading indicator
   }
 

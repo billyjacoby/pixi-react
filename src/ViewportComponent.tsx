@@ -47,7 +47,8 @@ const PixiComponentViewport = PixiComponent('Viewport', {
         maxScale: 4,
         minScale: 1 / 4,
       })
-      .moveCenter(stageSize.width / 2, stageSize.height / 2);
+      .moveCenter(stageSize.width / 2, stageSize.height / 2)
+      .setZoom(0.3);
 
     return viewport;
   },

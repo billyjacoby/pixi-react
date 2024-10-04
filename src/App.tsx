@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { Stage } from '@pixi/react';
-import { World } from './World';
+import { World } from './components/World';
 import { DESKTOP_SIZE } from '../constants';
 
 const App = () => {

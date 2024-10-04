@@ -1,25 +1,30 @@
-import React, { useRef, useEffect } from 'react';
-import * as PIXI from 'pixi.js';
-import { Sprite, useTick } from '@pixi/react';
+import React from 'react';
+import { PLAYER_SIZE } from '../lib/constants';
 import {
-  BUNNY_URL,
-  UP_KEYS,
   DOWN_KEYS,
   LEFT_KEYS,
-  SPEED,
-  MIN_SPEED,
   MAX_SPEED,
+  MIN_SPEED,
   RIGHT_KEYS,
-} from '../constants';
+  SPEED,
+  UP_KEYS,
+} from '../../constants';
+import { useTick } from '@pixi/react';
+import { Grid, Size } from '../types';
+import { getGridItemFromPosition } from '../lib/grid-utils';
+import { BLOCKING_ITEMS } from '../lib/map';
 
-export const Character = React.forwardRef<
-  PIXI.Sprite,
-  {
-    worldSize: { width: number; height: number };
-    stageSize: { width: number; height: number };
-  }
->(({ worldSize, stageSize }, ref) => {
-  const keysPressed = useRef<Set<string>>(new Set());
+const PLAYER_X_ADJUST = PLAYER_SIZE.width / 2;
+const PLAYER_Y_ADJUST = PLAYER_SIZE.height / 2;
+
+export const usePlayerMovement = ({
+  worldSize,
+  grid,
+}: {
+  worldSize: Size;
+  grid: Grid;
+}) => {
+  const keysPressed = React.useRef<Set<string>>(new Set());
 
   const [initialTouchPosition, setInitialTouchPosition] = React.useState<{
     x: number;
@@ -31,13 +36,11 @@ export const Character = React.forwardRef<
   } | null>(null);
 
   const [position, setPosition] = React.useState({
-    x: stageSize.width / 2,
-    y: stageSize.height / 2,
+    x: 0 + PLAYER_SIZE.width / 2,
+    y: 0 + PLAYER_SIZE.height / 2,
   });
 
-  console.log('🪵 | Tutorial | position:', position);
-
-  useEffect(() => {
+  React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) =>
       keysPressed.current.add(e.key.toLowerCase());
     const handleKeyUp = (e: KeyboardEvent) =>
@@ -77,30 +80,30 @@ export const Character = React.forwardRef<
   }, []);
 
   useTick((delta) => {
-    let dx = 0;
-    let dy = 0;
+    let xDelta = 0;
+    let yDelta = 0;
 
     // Keyboard movement logic
     if (
       keysPressed.current.has('a') ||
       LEFT_KEYS.some((key) => keysPressed.current.has(key))
     )
-      dx -= 1;
+      xDelta -= 1;
     if (
       keysPressed.current.has('d') ||
       RIGHT_KEYS.some((key) => keysPressed.current.has(key))
     )
-      dx += 1;
+      xDelta += 1;
     if (
       keysPressed.current.has('w') ||
       UP_KEYS.some((key) => keysPressed.current.has(key))
     )
-      dy -= 1;
+      yDelta -= 1;
     if (
       keysPressed.current.has('s') ||
       DOWN_KEYS.some((key) => keysPressed.current.has(key))
     )
-      dy += 1;
+      yDelta += 1;
 
     let speed = SPEED;
 
@@ -130,33 +133,77 @@ export const Character = React.forwardRef<
             );
 
         // Use touch input if it's outside the deadzone
-        dx = touchDx / dragLength;
-        dy = touchDy / dragLength;
+        xDelta = touchDx / dragLength;
+        yDelta = touchDy / dragLength;
 
         console.log('Drag length:', dragLength, 'Current speed:', speed); // Debug log
       }
     }
 
     // Normalize and apply speed if there's any movement
-    if (dx !== 0 || dy !== 0) {
-      const length = Math.sqrt(dx * dx + dy * dy);
-      dx = (dx / length) * speed * delta;
-      dy = (dy / length) * speed * delta;
+    if (xDelta !== 0 || yDelta !== 0) {
+      const length = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
+      xDelta = (xDelta / length) * speed * delta;
+      yDelta = (yDelta / length) * speed * delta;
 
-      setPosition((prev) => ({
-        x: Math.max(0, Math.min(worldSize.width, prev.x + dx)),
-        y: Math.max(0, Math.min(worldSize.height, prev.y + dy)),
-      }));
+      setPosition((prev) => {
+        let newXPosition = Math.max(
+          PLAYER_X_ADJUST,
+          Math.min(worldSize.width - PLAYER_X_ADJUST, prev.x + xDelta)
+        );
+        let newYPosition = Math.max(
+          Math.max(
+            PLAYER_Y_ADJUST,
+            Math.min(worldSize.height - PLAYER_Y_ADJUST, prev.y + yDelta)
+          )
+        );
+
+        const newGridItemX = getGridItemFromPosition({
+          grid,
+          position: {
+            x: newXPosition,
+            y: prev.y,
+          },
+          playerSize: PLAYER_SIZE,
+        });
+        const isXBlocked = BLOCKING_ITEMS.includes(newGridItemX);
+
+        const newGridItemY = getGridItemFromPosition({
+          grid,
+          position: {
+            x: prev.x,
+            y: newYPosition,
+          },
+          playerSize: PLAYER_SIZE,
+        });
+        const isYBlocked = BLOCKING_ITEMS.includes(newGridItemY);
+
+        //? Allows diagonal movement through blocks
+        const newGridItemXY = getGridItemFromPosition({
+          grid,
+          position: {
+            x: newXPosition,
+            y: newYPosition,
+          },
+          playerSize: PLAYER_SIZE,
+        });
+        const isXYBlocked = BLOCKING_ITEMS.includes(newGridItemXY);
+
+        if (isXBlocked && isXYBlocked) {
+          newXPosition = prev.x;
+        }
+
+        if (isYBlocked && isXYBlocked) {
+          newYPosition = prev.y;
+        }
+
+        return {
+          x: newXPosition,
+          y: newYPosition,
+        };
+      });
     }
   });
 
-  return (
-    <Sprite
-      ref={ref}
-      image={BUNNY_URL}
-      x={position.x}
-      y={position.y}
-      anchor={0.5}
-    />
-  );
-});
+  return position;
+};
