@@ -1,29 +1,57 @@
-import React from 'react';
+import React, { LegacyRef, useCallback } from 'react';
 import * as PIXI from 'pixi.js';
-import { Sprite } from '@pixi/react';
-import { BUNNY_URL } from '../../constants';
-import { PLAYER_SIZE } from '../lib/constants';
 import { usePlayerMovement } from '../hooks/usePlayerMovement';
-import { Grid, Size } from '../types';
+import { Coords, Grid, Size } from '../types';
+import { PinkMonster } from './PinkMonster';
+import { useApp } from '@pixi/react';
+import { Text } from '@pixi/react';
+import { TextStyle } from 'pixi.js';
+import { PLAYER_SIZE } from '../lib/constants';
 
 export const Character = React.forwardRef<
-  PIXI.Sprite,
+  PIXI.AnimatedSprite | PIXI.Sprite,
   {
     worldSize: Size;
     grid: Grid;
+    collidableItems: (Coords & Size)[];
   }
->(({ worldSize, grid }, ref) => {
-  const position = usePlayerMovement({ worldSize, grid });
+>(({ worldSize, grid, collidableItems }, ref) => {
+  const { position, direction } = usePlayerMovement({
+    worldSize,
+    grid,
+    collidableItems,
+  });
 
   return (
-    <Sprite
-      width={PLAYER_SIZE.width}
-      height={PLAYER_SIZE.height}
-      ref={ref}
-      image={BUNNY_URL}
-      x={position.x}
-      y={position.y}
-      anchor={0.5}
-    />
+    <>
+      <Text
+        text={JSON.stringify(position)}
+        x={position.x - 100}
+        y={position.y - 200}
+        style={
+          new TextStyle({
+            align: 'center',
+            fontSize: 48,
+          })
+        }
+      />
+      <PinkMonster
+        ref={ref as LegacyRef<PIXI.AnimatedSprite>}
+        position={position}
+        direction={direction}
+      />
+    </>
   );
+
+  // return (
+  //   <Sprite
+  //     width={PLAYER_SIZE.width}
+  //     height={PLAYER_SIZE.height}
+  //     ref={ref as LegacyRef<PIXI.Sprite>}
+  //     image={BUNNY_URL}
+  //     x={position.x}
+  //     y={position.y}
+  //     anchor={0.5}
+  //   />
+  // );
 });

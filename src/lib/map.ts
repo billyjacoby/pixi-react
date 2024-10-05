@@ -12,7 +12,7 @@ import { GridCell } from '../types';
 
 export const BLOCKING_ITEMS = '1' as GridCell;
 
-export const GRID_CELL_SIZE = 128;
+export const GRID_CELL_SIZE = 256;
 
 export const levels = [
   {

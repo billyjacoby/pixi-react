@@ -1,4 +1,6 @@
-import { Grid, GridCell, Coords, Size } from '../types';
+import { Grid, GridCell, Coords } from '../types';
+
+import { GRID_CELL_SIZE } from './map';
 
 //TODO: Make this actually type safe
 export function gridFromString(grid: string): Grid {
@@ -16,14 +18,13 @@ export function gridFromString(grid: string): Grid {
 export function getGridItemFromPosition({
   grid,
   position,
-  playerSize,
 }: {
   grid: Grid;
   position: Coords;
-  playerSize: Size;
 }): GridCell {
-  const gridYIndex = Math.floor(position.y / playerSize.height);
-  const gridXIndex = Math.floor(position.x / playerSize.width);
+  const gridYIndex = Math.floor(position.y / GRID_CELL_SIZE);
+  const gridXIndex = Math.floor(position.x / GRID_CELL_SIZE);
 
-  return grid[gridYIndex][gridXIndex];
+  // return grid[gridYIndex][gridXIndex];
+  return '0';
 }

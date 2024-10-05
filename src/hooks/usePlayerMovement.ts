@@ -10,9 +10,10 @@ import {
   UP_KEYS,
 } from '../../constants';
 import { useTick } from '@pixi/react';
-import { Grid, Size } from '../types';
+import { Coords, Grid, Size } from '../types';
 import { getGridItemFromPosition } from '../lib/grid-utils';
 import { BLOCKING_ITEMS } from '../lib/map';
+import { useCheckCollision } from './useCheckCollision';
 
 const PLAYER_X_ADJUST = PLAYER_SIZE.width / 2;
 const PLAYER_Y_ADJUST = PLAYER_SIZE.height / 2;
@@ -20,9 +21,11 @@ const PLAYER_Y_ADJUST = PLAYER_SIZE.height / 2;
 export const usePlayerMovement = ({
   worldSize,
   grid,
+  collidableItems,
 }: {
   worldSize: Size;
   grid: Grid;
+  collidableItems: (Coords & Size)[];
 }) => {
   const keysPressed = React.useRef<Set<string>>(new Set());
 
@@ -39,6 +42,10 @@ export const usePlayerMovement = ({
     x: 0 + PLAYER_SIZE.width / 2,
     y: 0 + PLAYER_SIZE.height / 2,
   });
+
+  const [direction, setDirection] = React.useState<'left' | 'right'>('right');
+
+  const { checkCollision } = useCheckCollision(collidableItems);
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) =>
@@ -158,43 +165,30 @@ export const usePlayerMovement = ({
           )
         );
 
-        const newGridItemX = getGridItemFromPosition({
-          grid,
-          position: {
-            x: newXPosition,
-            y: prev.y,
-          },
-          playerSize: PLAYER_SIZE,
+        const collisionResult = checkCollision({
+          x: newXPosition,
+          y: newYPosition,
         });
-        const isXBlocked = BLOCKING_ITEMS.includes(newGridItemX);
-
-        const newGridItemY = getGridItemFromPosition({
-          grid,
-          position: {
-            x: prev.x,
-            y: newYPosition,
-          },
-          playerSize: PLAYER_SIZE,
-        });
-        const isYBlocked = BLOCKING_ITEMS.includes(newGridItemY);
-
-        //? Allows diagonal movement through blocks
-        const newGridItemXY = getGridItemFromPosition({
-          grid,
-          position: {
-            x: newXPosition,
-            y: newYPosition,
-          },
-          playerSize: PLAYER_SIZE,
-        });
-        const isXYBlocked = BLOCKING_ITEMS.includes(newGridItemXY);
-
-        if (isXBlocked && isXYBlocked) {
-          newXPosition = prev.x;
+        console.log('🪵 | setPosition | collisionResult:', collisionResult);
+        if (collisionResult) {
+          return prev;
         }
 
-        if (isYBlocked && isXYBlocked) {
-          newYPosition = prev.y;
+        // if (isXBlocked) {
+        //   newXPosition = prev.x;
+        // }
+
+        // if (isYBlocked) {
+        //   newYPosition = prev.y;
+        // }
+
+        //? Check direction
+        if (newXPosition > prev.x) {
+          setDirection('right');
+        }
+
+        if (newXPosition < prev.x) {
+          setDirection('left');
         }
 
         return {
@@ -205,5 +199,5 @@ export const usePlayerMovement = ({
     }
   });
 
-  return position;
+  return { position, direction };
 };

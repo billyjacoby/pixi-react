@@ -10,7 +10,6 @@ async function makeAnimatedSpriteTextures() {
 
   for (i = 0; i < 26; i++) {
     const texture = Texture.from(`Explosion_Sequence_A ${i + 1}.png`);
-
     explosionTextures.push(texture);
   }
 

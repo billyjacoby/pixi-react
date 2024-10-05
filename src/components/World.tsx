@@ -1,14 +1,14 @@
 import React from 'react';
 import { useTick } from '@pixi/react';
-import PixiViewportComponent from '../ViewportComponent';
+import PixiViewportComponent from './ViewportComponent';
 import { Viewport } from 'pixi-viewport';
 import * as PIXI from 'pixi.js';
 import { Character } from './Character';
 import { Explosion } from './Explosion';
-import { levels } from '../lib/map';
+import { GRID_CELL_SIZE, levels } from '../lib/map';
 import { gridFromString } from '../lib/grid-utils';
-import { Obstacles } from './Obstacles';
 import { useTilemap } from '../hooks/useTilemap';
+import { Coords, Size } from '../types';
 
 interface WorldProps {
   stageSize: { width: number; height: number };
@@ -16,18 +16,23 @@ interface WorldProps {
 
 export const World: React.FC<WorldProps> = ({ stageSize }) => {
   const viewportRef = React.useRef<Viewport>(null);
-  const spriteRef = React.useRef<PIXI.Sprite>(null);
+  const spriteRef = React.useRef<PIXI.AnimatedSprite>(null);
+
+  const [collidableItems, setCollidableItems] = React.useState<
+    (Coords & Size)[]
+  >([]);
+  console.log('🪵 | collidableItems:', collidableItems);
 
   const [currentLevelIndex] = React.useState(0);
   const currentLevel = levels[currentLevelIndex];
 
   const grid = gridFromString(currentLevel.grid);
 
-  const tileMap = useTilemap(grid);
+  const tileMap = useTilemap(grid, setCollidableItems);
 
   const worldSize = React.useMemo(() => {
-    const height = grid.length * 128;
-    const width = grid[0].length * 128;
+    const height = grid.length * GRID_CELL_SIZE;
+    const width = grid[0].length * GRID_CELL_SIZE;
     return { width, height };
   }, [grid]);
 
@@ -53,9 +58,14 @@ export const World: React.FC<WorldProps> = ({ stageSize }) => {
       worldSize={worldSize}
       tileMap={tileMap}
     >
-      <Character ref={spriteRef} worldSize={worldSize} grid={grid} />
-      <Obstacles grid={grid} />
+      <Character
+        ref={spriteRef}
+        worldSize={worldSize}
+        grid={grid}
+        collidableItems={collidableItems}
+      />
       <Explosion />
+      {/* <Obstacles grid={grid} /> */}
     </PixiViewportComponent>
   );
 };
