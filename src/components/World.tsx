@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTick } from '@pixi/react';
-import PixiViewportComponent from './ViewportComponent';
+import PixiViewportComponent from '../lib/components/ViewportComponent';
 import { Viewport } from 'pixi-viewport';
 import * as PIXI from 'pixi.js';
 import { Character } from './Character';

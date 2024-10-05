@@ -2,9 +2,10 @@ import React, { LegacyRef } from 'react';
 import * as PIXI from 'pixi.js';
 import { usePlayerMovement } from '../hooks/usePlayerMovement';
 import { Coords, Grid, Size } from '../types';
-import { PinkMonster } from './PinkMonster';
 import { Text } from '@pixi/react';
 import { TextStyle } from 'pixi.js';
+import { AnimatedSprite } from '../lib/components/AnimatedSprite';
+import { PLAYER_SIZE } from '../lib/constants';
 
 export const Character = React.forwardRef<
   PIXI.AnimatedSprite | PIXI.Sprite,
@@ -33,23 +34,21 @@ export const Character = React.forwardRef<
           })
         }
       />
-      <PinkMonster
+      <AnimatedSprite
         ref={ref as LegacyRef<PIXI.AnimatedSprite>}
-        position={position}
         direction={direction}
+        spriteSheetProps={{
+          assetPath: '/tilemaps/pink-monster.json',
+          frames: 4,
+          frameTemplate: 'tile00{{i}}.png',
+        }}
+        x={position.x}
+        y={position.y}
+        isPlaying={true}
+        animationSpeed={0.1}
+        width={PLAYER_SIZE.width}
+        height={PLAYER_SIZE.height}
       />
     </>
   );
-
-  // return (
-  //   <Sprite
-  //     width={PLAYER_SIZE.width}
-  //     height={PLAYER_SIZE.height}
-  //     ref={ref as LegacyRef<PIXI.Sprite>}
-  //     image={BUNNY_URL}
-  //     x={position.x}
-  //     y={position.y}
-  //     anchor={0.5}
-  //   />
-  // );
 });
