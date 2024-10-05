@@ -162,21 +162,24 @@ export const usePlayerMovement = ({
           )
         );
 
-        const { xIsCollided, yIsCollided } = checkCollision({
+        const isXBlocked = checkCollision({
+          x: newXPosition,
+          y: prev.y,
+        });
+        const isYBlocked = checkCollision({
+          x: prev.x,
+          y: newYPosition,
+        });
+        const isXYBlocked = checkCollision({
           x: newXPosition,
           y: newYPosition,
         });
-        console.log('🪵 | setPosition | xIsCollided:', xIsCollided);
-        console.log('🪵 | setPosition | yIsCollided:', yIsCollided);
-        // if (xIsCollided || yIsCollided) {
-        //   return prev;
-        // }
 
-        if (xIsCollided) {
+        if (isXBlocked && isXYBlocked) {
           newXPosition = prev.x;
         }
 
-        if (yIsCollided) {
+        if (isYBlocked && isXYBlocked) {
           newYPosition = prev.y;
         }
 
