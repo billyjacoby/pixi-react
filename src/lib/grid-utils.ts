@@ -25,6 +25,5 @@ export function getGridItemFromPosition({
   const gridYIndex = Math.floor(position.y / GRID_CELL_SIZE);
   const gridXIndex = Math.floor(position.x / GRID_CELL_SIZE);
 
-  // return grid[gridYIndex][gridXIndex];
-  return '0';
+  return grid[gridYIndex][gridXIndex];
 }

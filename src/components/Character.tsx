@@ -1,12 +1,10 @@
-import React, { LegacyRef, useCallback } from 'react';
+import React, { LegacyRef } from 'react';
 import * as PIXI from 'pixi.js';
 import { usePlayerMovement } from '../hooks/usePlayerMovement';
 import { Coords, Grid, Size } from '../types';
 import { PinkMonster } from './PinkMonster';
-import { useApp } from '@pixi/react';
 import { Text } from '@pixi/react';
 import { TextStyle } from 'pixi.js';
-import { PLAYER_SIZE } from '../lib/constants';
 
 export const Character = React.forwardRef<
   PIXI.AnimatedSprite | PIXI.Sprite,

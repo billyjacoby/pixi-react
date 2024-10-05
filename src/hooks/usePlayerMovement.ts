@@ -11,8 +11,6 @@ import {
 } from '../../constants';
 import { useTick } from '@pixi/react';
 import { Coords, Grid, Size } from '../types';
-import { getGridItemFromPosition } from '../lib/grid-utils';
-import { BLOCKING_ITEMS } from '../lib/map';
 import { useCheckCollision } from './useCheckCollision';
 
 const PLAYER_X_ADJUST = PLAYER_SIZE.width / 2;
@@ -20,7 +18,6 @@ const PLAYER_Y_ADJUST = PLAYER_SIZE.height / 2;
 
 export const usePlayerMovement = ({
   worldSize,
-  grid,
   collidableItems,
 }: {
   worldSize: Size;
@@ -165,22 +162,23 @@ export const usePlayerMovement = ({
           )
         );
 
-        const collisionResult = checkCollision({
+        const { xIsCollided, yIsCollided } = checkCollision({
           x: newXPosition,
           y: newYPosition,
         });
-        console.log('🪵 | setPosition | collisionResult:', collisionResult);
-        if (collisionResult) {
-          return prev;
+        console.log('🪵 | setPosition | xIsCollided:', xIsCollided);
+        console.log('🪵 | setPosition | yIsCollided:', yIsCollided);
+        // if (xIsCollided || yIsCollided) {
+        //   return prev;
+        // }
+
+        if (xIsCollided) {
+          newXPosition = prev.x;
         }
 
-        // if (isXBlocked) {
-        //   newXPosition = prev.x;
-        // }
-
-        // if (isYBlocked) {
-        //   newYPosition = prev.y;
-        // }
+        if (yIsCollided) {
+          newYPosition = prev.y;
+        }
 
         //? Check direction
         if (newXPosition > prev.x) {

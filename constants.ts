@@ -5,7 +5,7 @@ export const DESKTOP_SIZE = { width: 800, height: 600 };
 
 export const SPEED = 8;
 export const MIN_SPEED = SPEED * 0.5;
-export const MAX_SPEED = SPEED * 2;
+export const MAX_SPEED = SPEED * 1.5;
 
 export const UP_KEYS = ['ArrowUp', 'w'];
 export const DOWN_KEYS = ['ArrowDown', 's'];
