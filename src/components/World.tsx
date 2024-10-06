@@ -8,7 +8,9 @@ import { Explosion } from './Explosion';
 import { GRID_CELL_SIZE, levels } from '../lib/map';
 import { gridFromString } from '../lib/grid-utils';
 import { useTilemap } from '../hooks/useTilemap';
-import { Coords, Size } from '../types';
+import { CollidableItem, InteractiveItem } from '../types';
+import { Obstacles } from './Obstacles';
+import { Interactives } from './Interactives';
 
 interface WorldProps {
   stageSize: { width: number; height: number };
@@ -18,23 +20,24 @@ export const World: React.FC<WorldProps> = ({ stageSize }) => {
   const viewportRef = React.useRef<Viewport>(null);
   const spriteRef = React.useRef<PIXI.AnimatedSprite>(null);
 
-  const [collidableItems, setCollidableItems] = React.useState<
-    (Coords & Size)[]
+  const [obstacles, setObstacles] = React.useState<CollidableItem[]>([]);
+  const [interactiveItems, setInterActiveItems] = React.useState<
+    InteractiveItem[]
   >([]);
-  console.log('🪵 | collidableItems:', collidableItems);
 
   const [currentLevelIndex] = React.useState(0);
   const currentLevel = levels[currentLevelIndex];
 
-  const grid = gridFromString(currentLevel.grid);
+  const tileGrid = gridFromString(currentLevel.tileset);
+  const obstacleGrid = gridFromString(currentLevel.obstacles);
 
-  const tileMap = useTilemap(grid, setCollidableItems);
+  const tileMap = useTilemap(tileGrid);
 
   const worldSize = React.useMemo(() => {
-    const height = grid.length * GRID_CELL_SIZE;
-    const width = grid[0].length * GRID_CELL_SIZE;
+    const height = tileGrid.length * GRID_CELL_SIZE;
+    const width = tileGrid[0].length * GRID_CELL_SIZE;
     return { width, height };
-  }, [grid]);
+  }, [tileGrid]);
 
   //? This handles keeping the viewport centered on the sprite
   useTick(() => {
@@ -58,14 +61,19 @@ export const World: React.FC<WorldProps> = ({ stageSize }) => {
       worldSize={worldSize}
       tileMap={tileMap}
     >
+      <Interactives
+        grid={obstacleGrid}
+        setInterActiveItems={setInterActiveItems}
+      />
       <Character
         ref={spriteRef}
         worldSize={worldSize}
-        grid={grid}
-        collidableItems={collidableItems}
+        grid={tileGrid}
+        obstacles={obstacles}
+        interactives={interactiveItems}
       />
       <Explosion />
-      {/* <Obstacles grid={grid} /> */}
+      <Obstacles grid={obstacleGrid} setObstacles={setObstacles} />
     </PixiViewportComponent>
   );
 };

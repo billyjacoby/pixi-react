@@ -10,7 +10,7 @@ import {
   UP_KEYS,
 } from '../../constants';
 import { useTick } from '@pixi/react';
-import { Coords, Grid, Size } from '../types';
+import { CollidableItem, Grid, InteractiveItem, Size } from '../types';
 import { useCheckCollision } from './useCheckCollision';
 
 const PLAYER_X_ADJUST = PLAYER_SIZE.width / 2;
@@ -18,11 +18,13 @@ const PLAYER_Y_ADJUST = PLAYER_SIZE.height / 2;
 
 export const usePlayerMovement = ({
   worldSize,
-  collidableItems,
+  obstacles,
+  interactives,
 }: {
   worldSize: Size;
   grid: Grid;
-  collidableItems: (Coords & Size)[];
+  obstacles: CollidableItem[];
+  interactives: InteractiveItem[];
 }) => {
   const keysPressed = React.useRef<Set<string>>(new Set());
 
@@ -42,7 +44,7 @@ export const usePlayerMovement = ({
 
   const [direction, setDirection] = React.useState<'left' | 'right'>('right');
 
-  const { checkCollision } = useCheckCollision(collidableItems);
+  const { checkCollision } = useCheckCollision(obstacles, interactives);
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) =>

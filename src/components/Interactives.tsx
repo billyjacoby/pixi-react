@@ -1,33 +1,34 @@
 import React from 'react';
 import { Sprite } from '@pixi/react';
-import { Grid } from '../types';
+import { Grid, InteractiveItem } from '../types';
 import {
   cellToAssetNameMap,
   cellToAssetNameMapKey,
   GRID_CELL_SIZE,
-  obstacleCells,
-  ObstacleCellValue,
+  interactiveActions,
+  interactiveCells,
+  InteractiveCellValue,
 } from '../lib/map';
 import * as PIXI from 'pixi.js';
-import { CollidableItem } from '../types';
 
 const PERSPECTIVE_HEIGHT_RATIO = 0.3;
 
-export function Obstacles({
+export function Interactives({
   grid,
-  setObstacles,
+  setInterActiveItems,
 }: {
   grid: Grid;
-  setObstacles: React.Dispatch<React.SetStateAction<CollidableItem[]>>;
+  setInterActiveItems: React.Dispatch<React.SetStateAction<InteractiveItem[]>>;
 }) {
   const [children, setChildren] = React.useState<any[]>([]);
-  async function loadObstacles() {
+  async function loadInteractives() {
     await PIXI.Assets.load('/tilemaps/assets.json');
     let newChildren: any[] = [];
-    const obstacles: CollidableItem[] = [];
+    const interactiveItems: InteractiveItem[] = [];
     grid.forEach((row, y) =>
       row.map((cell, x) => {
-        if (!obstacleCells.includes(cell as ObstacleCellValue)) return null;
+        if (!interactiveCells.includes(cell as InteractiveCellValue))
+          return null;
         let asset = cellToAssetNameMap[cell as cellToAssetNameMapKey];
         let assetName: string;
         if (Array.isArray(asset)) {
@@ -41,31 +42,32 @@ export function Obstacles({
           <Sprite
             anchor={[0, 0.7]}
             ref={ref}
-            key={`obstacle-${x}-${y}`}
+            key={`interactives-${x}-${y}`}
             texture={itemTexture}
             x={x * GRID_CELL_SIZE}
             y={y * GRID_CELL_SIZE}
-            name={`obstacle-${x}-${y}`}
+            name={`interactives-${x}-${y}`}
           />
         );
 
-        obstacles.push({
+        interactiveItems.push({
           x: x * GRID_CELL_SIZE,
           y: y * GRID_CELL_SIZE,
           width: itemTexture.width,
           height: itemTexture.height * PERSPECTIVE_HEIGHT_RATIO,
           ref,
           assetName,
+          action: interactiveActions[cell as (typeof interactiveCells)[number]],
         });
         return children;
       })
     );
-    setObstacles(obstacles);
+    setInterActiveItems(interactiveItems);
     setChildren(newChildren);
   }
 
   React.useEffect(() => {
-    loadObstacles();
+    loadInteractives();
   }, []);
 
   if (children.length === 0) {

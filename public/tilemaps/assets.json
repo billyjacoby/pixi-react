@@ -1,0 +1,79 @@
+{"frames": {
+
+"cylinder_building.png":
+{
+	"frame": {"x":1,"y":1,"w":326,"h":874},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":326,"h":874},
+	"sourceSize": {"w":326,"h":874}
+},
+"exit.png":
+{
+	"frame": {"x":329,"y":535,"w":233,"h":219},
+	"rotated": true,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":233,"h":219},
+	"sourceSize": {"w":233,"h":219}
+},
+"round_building.png":
+{
+	"frame": {"x":329,"y":1,"w":532,"h":523},
+	"rotated": true,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":532,"h":523},
+	"sourceSize": {"w":532,"h":523}
+},
+"sign.png":
+{
+	"frame": {"x":626,"y":535,"w":157,"h":189},
+	"rotated": true,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":157,"h":189},
+	"sourceSize": {"w":157,"h":189}
+},
+"stones_1.png":
+{
+	"frame": {"x":329,"y":770,"w":103,"h":86},
+	"rotated": true,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":103,"h":86},
+	"sourceSize": {"w":103,"h":86}
+},
+"stones_2.png":
+{
+	"frame": {"x":745,"y":694,"w":115,"h":106},
+	"rotated": true,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":115,"h":106},
+	"sourceSize": {"w":115,"h":106}
+},
+"stones_3.png":
+{
+	"frame": {"x":626,"y":694,"w":146,"h":117},
+	"rotated": true,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":146,"h":117},
+	"sourceSize": {"w":146,"h":117}
+},
+"stones_4.png":
+{
+	"frame": {"x":417,"y":770,"w":207,"h":93},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":207,"h":93},
+	"sourceSize": {"w":207,"h":93}
+}},
+"animations": {
+	"stones": ["stones_1.png","stones_2.png","stones_3.png","stones_4.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "assets.png",
+	"format": "RGBA8888",
+	"size": {"w":853,"h":876},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:06b6383b27c5086a3eb78aa46392002c:309402580adce6a6d62ea708c469234b:a759b6bbc8381ac9c472b28f589ad0d6$"
+}
+}

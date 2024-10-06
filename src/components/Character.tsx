@@ -1,7 +1,7 @@
 import React, { LegacyRef } from 'react';
 import * as PIXI from 'pixi.js';
 import { usePlayerMovement } from '../hooks/usePlayerMovement';
-import { Coords, Grid, Size } from '../types';
+import { CollidableItem, Grid, InteractiveItem, Size } from '../types';
 import { Text } from '@pixi/react';
 import { TextStyle } from 'pixi.js';
 import { AnimatedSprite } from '../lib/components/AnimatedSprite';
@@ -12,13 +12,15 @@ export const Character = React.forwardRef<
   {
     worldSize: Size;
     grid: Grid;
-    collidableItems: (Coords & Size)[];
+    obstacles: CollidableItem[];
+    interactives: InteractiveItem[];
   }
->(({ worldSize, grid, collidableItems }, ref) => {
+>(({ worldSize, grid, obstacles, interactives }, ref) => {
   const { position, direction } = usePlayerMovement({
     worldSize,
     grid,
-    collidableItems,
+    obstacles,
+    interactives,
   });
 
   return (
