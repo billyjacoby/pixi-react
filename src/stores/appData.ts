@@ -18,6 +18,8 @@ type AppDataStoreData = {
   playerDirection: PlayerDirection;
   currentLevelIndex: number;
   currentLevel: Level;
+  obstacles: CollidableItem[];
+  interactiveItems: InteractiveItem[];
 };
 
 const defaultAppDataStore: AppDataStoreData = {
@@ -25,6 +27,8 @@ const defaultAppDataStore: AppDataStoreData = {
   playerDirection: 'right',
   currentLevelIndex: 0,
   currentLevel: levels[0],
+  obstacles: [],
+  interactiveItems: [],
 };
 
 type AppDataStoreActions = {
@@ -33,6 +37,8 @@ type AppDataStoreActions = {
   setPlayerState: (playerState: PlayerState) => void;
   setPlayerDirection: (playerDirection: PlayerDirection) => void;
   setCurrentLevelIndex: (currentLevelIndex: number) => void;
+  setObstacles: (obstacles: CollidableItem[]) => void;
+  setInteractiveItems: (interactiveItems: InteractiveItem[]) => void;
 };
 
 type InteractiveActions = {
@@ -57,7 +63,6 @@ const getInteractiveActions = (
   },
   NEXT_LEVEL: () => {
     const currentLevelIndex = get().currentLevelIndex;
-    console.log('NEXT LEVEL ACTION');
     if (currentLevelIndex < levels.length - 1) {
       get().setCurrentLevelIndex(currentLevelIndex + 1);
     }
@@ -83,6 +88,12 @@ const getActions = (
   },
   setCurrentLevelIndex: (currentLevelIndex: number) => {
     set({ currentLevelIndex, currentLevel: levels[currentLevelIndex] });
+  },
+  setObstacles: (obstacles: CollidableItem[]) => {
+    set({ obstacles });
+  },
+  setInteractiveItems: (interactiveItems: InteractiveItem[]) => {
+    set({ interactiveItems });
   },
 });
 

@@ -7,7 +7,6 @@ import { UserInterface } from './components/UserInterface';
 
 const App = () => {
   const [stageSize, setStageSize] = React.useState({ width: 800, height: 600 });
-  console.log('🪵 | App | stageSize:', stageSize);
 
   React.useEffect(() => {
     const handleResize = () => {
@@ -43,7 +42,7 @@ const App = () => {
         >
           <World stageSize={stageSize} />
         </Stage>
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2">
+        <div className="absolute bottom-1/2 md:bottom-10 left-1/2 -translate-x-1/2">
           <UserInterface />
         </div>
       </div>

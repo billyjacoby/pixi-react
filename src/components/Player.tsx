@@ -1,11 +1,11 @@
 import React, { LegacyRef } from 'react';
 import * as PIXI from 'pixi.js';
 import { usePlayerMovement } from '../hooks/usePlayerMovement';
-import { CollidableItem, Grid, InteractiveItem, Size } from '../types';
+import { Grid, Size } from '../types';
 import { Text } from '@pixi/react';
 import { TextStyle } from 'pixi.js';
 import { AnimatedSprite } from '../lib/components/AnimatedSprite';
-import { PLAYER_SIZE } from '../lib/constants';
+import { DEBUG, PLAYER_SIZE } from '../lib/constants';
 import { useAppDataStore } from '../stores/appData';
 
 export const Player = React.forwardRef<
@@ -13,10 +13,11 @@ export const Player = React.forwardRef<
   {
     worldSize: Size;
     grid: Grid;
-    obstacles: CollidableItem[];
-    interactives: InteractiveItem[];
   }
->(({ worldSize, grid, obstacles, interactives }, ref) => {
+>(({ worldSize, grid }, ref) => {
+  const obstacles = useAppDataStore((state) => state.obstacles);
+  const interactives = useAppDataStore((state) => state.interactiveItems);
+
   const { position, direction } = usePlayerMovement({
     worldSize,
     grid,
@@ -24,40 +25,37 @@ export const Player = React.forwardRef<
     interactives,
   });
 
-  const activeObstacle = useAppDataStore((state) => state.activeObstacle);
-  if (activeObstacle) {
-    console.log('🪵 | Character | activeObstacle:', activeObstacle);
-  }
-  const interactiveItem = useAppDataStore((state) => state.interactiveItem);
-  if (interactiveItem) {
-    console.log('🪵 | Character | interactiveItem:', interactiveItem);
-  }
+  // const interactiveItem = useAppDataStore((state) => state.interactiveItem);
 
   return (
     <>
-      <Text
-        text={JSON.stringify(position)}
-        x={position.x - 100}
-        y={position.y - 200}
-        style={
-          new TextStyle({
-            align: 'center',
-            fontSize: 48,
-          })
-        }
-      />
-      {interactiveItem && (
-        <Text
-          text={JSON.stringify(interactiveItem.action, null, 2)}
-          x={position.x - PLAYER_SIZE.width - 40}
-          y={position.y + 70}
-          style={
-            new TextStyle({
-              align: 'center',
-              fontSize: 48,
-            })
-          }
-        />
+      {DEBUG && (
+        <>
+          <Text
+            text={JSON.stringify(position)}
+            x={position.x - 100}
+            y={position.y - 200}
+            style={
+              new TextStyle({
+                align: 'center',
+                fontSize: 48,
+              })
+            }
+          />
+          {/* {interactiveItem && (
+            <Text
+              text={JSON.stringify(interactiveItem.action, null, 2)}
+              x={position.x - PLAYER_SIZE.width - 40}
+              y={position.y + 70}
+              style={
+                new TextStyle({
+                  align: 'center',
+                  fontSize: 48,
+                })
+              }
+            />
+          )} */}
+        </>
       )}
       <AnimatedSprite
         ref={ref as LegacyRef<PIXI.AnimatedSprite>}
@@ -73,6 +71,7 @@ export const Player = React.forwardRef<
         animationSpeed={0.1}
         width={PLAYER_SIZE.width}
         height={PLAYER_SIZE.height}
+        zIndex={10}
       />
     </>
   );

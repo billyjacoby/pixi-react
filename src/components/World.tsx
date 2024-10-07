@@ -7,7 +7,6 @@ import { Player } from './Player';
 import { GRID_CELL_SIZE } from '../lib/map';
 import { gridFromString } from '../lib/grid-utils';
 import { useTilemap } from '../hooks/useTilemap';
-import { CollidableItem, InteractiveItem } from '../types';
 import { Obstacles } from './Obstacles';
 import { Interactives } from './Interactives';
 import { useAppDataStore } from '@/stores/appData';
@@ -20,16 +19,10 @@ export const World: React.FC<WorldProps> = ({ stageSize }) => {
   const viewportRef = React.useRef<Viewport>(null);
   const spriteRef = React.useRef<PIXI.AnimatedSprite>(null);
 
-  const [obstacles, setObstacles] = React.useState<CollidableItem[]>([]);
-  const [interactiveItems, setInterActiveItems] = React.useState<
-    InteractiveItem[]
-  >([]);
-
   const currentLevel = useAppDataStore((state) => state.currentLevel);
   console.log('🪵 | currentLevel:', currentLevel);
 
   const tileGrid = gridFromString(currentLevel.tileset);
-  const obstacleGrid = gridFromString(currentLevel.obstacles);
 
   const tileMap = useTilemap(tileGrid);
 
@@ -66,18 +59,9 @@ export const World: React.FC<WorldProps> = ({ stageSize }) => {
       worldSize={worldSize}
       tileMap={tileMap}
     >
-      <Interactives
-        setInterActiveItems={setInterActiveItems}
-        interactiveItems={interactiveItems}
-      />
-      <Player
-        ref={spriteRef}
-        worldSize={worldSize}
-        grid={tileGrid}
-        obstacles={obstacles}
-        interactives={interactiveItems}
-      />
-      <Obstacles obstacles={obstacles} setObstacles={setObstacles} />
+      <Interactives />
+      <Player ref={spriteRef} worldSize={worldSize} grid={tileGrid} />
+      <Obstacles />
     </PixiViewportComponent>
   );
 };
