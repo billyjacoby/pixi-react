@@ -3,6 +3,7 @@ import './App.css';
 import { Stage } from '@pixi/react';
 import { World } from './components/World';
 import { DESKTOP_SIZE } from '../constants';
+import { UserInterface } from './components/UserInterface';
 
 const App = () => {
   const [stageSize, setStageSize] = React.useState({ width: 800, height: 600 });
@@ -34,13 +35,18 @@ const App = () => {
 
   return (
     <div className="app-container">
-      <Stage
-        width={stageSize.width}
-        height={stageSize.height}
-        options={{ backgroundColor: 0x1099bb }}
-      >
-        <World stageSize={stageSize} />
-      </Stage>
+      <div className="relative">
+        <Stage
+          width={stageSize.width}
+          height={stageSize.height}
+          options={{ backgroundColor: 0x1099bb }}
+        >
+          <World stageSize={stageSize} />
+        </Stage>
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2">
+          <UserInterface />
+        </div>
+      </div>
     </div>
   );
 };

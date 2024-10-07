@@ -11,7 +11,8 @@ import {
 } from '../../constants';
 import { useTick } from '@pixi/react';
 import { CollidableItem, Grid, InteractiveItem, Size } from '../types';
-import { useCheckCollision } from './useCheckCollision';
+import { useCheckItemHit } from './useCheckCollision';
+import { useAppDataStore } from '../stores/appData';
 
 const PLAYER_X_ADJUST = PLAYER_SIZE.width / 2;
 const PLAYER_Y_ADJUST = PLAYER_SIZE.height / 2;
@@ -44,7 +45,13 @@ export const usePlayerMovement = ({
 
   const [direction, setDirection] = React.useState<'left' | 'right'>('right');
 
-  const { checkCollision } = useCheckCollision(obstacles, interactives);
+  const { checkItemHit: checkObstacleHit } = useCheckItemHit(obstacles);
+  const { checkItemHit: checkInteractiveHit } = useCheckItemHit(interactives);
+
+  const setInteractiveItem = useAppDataStore(
+    (state) => state.setInteractiveItem
+  );
+  const setActiveObstacle = useAppDataStore((state) => state.setActiveObstacle);
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) =>
@@ -164,24 +171,35 @@ export const usePlayerMovement = ({
           )
         );
 
-        const isXBlocked = checkCollision({
+        const xObstacleHit = checkObstacleHit({
           x: newXPosition,
           y: prev.y,
         });
-        const isYBlocked = checkCollision({
+        const yObstacleHit = checkObstacleHit({
           x: prev.x,
           y: newYPosition,
         });
-        const isXYBlocked = checkCollision({
-          x: newXPosition,
-          y: newYPosition,
-        });
+        const xyObstacleHit = checkObstacleHit(
+          {
+            x: newXPosition,
+            y: newYPosition,
+          },
+          setActiveObstacle
+        );
 
-        if (isXBlocked && isXYBlocked) {
+        checkInteractiveHit(
+          {
+            x: newXPosition,
+            y: newYPosition,
+          },
+          setInteractiveItem
+        );
+
+        if (xObstacleHit.isHit && xyObstacleHit.isHit) {
           newXPosition = prev.x;
         }
 
-        if (isYBlocked && isXYBlocked) {
+        if (yObstacleHit.isHit && xyObstacleHit.isHit) {
           newYPosition = prev.y;
         }
 

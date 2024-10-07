@@ -6,8 +6,9 @@ import { Text } from '@pixi/react';
 import { TextStyle } from 'pixi.js';
 import { AnimatedSprite } from '../lib/components/AnimatedSprite';
 import { PLAYER_SIZE } from '../lib/constants';
+import { useAppDataStore } from '../stores/appData';
 
-export const Character = React.forwardRef<
+export const Player = React.forwardRef<
   PIXI.AnimatedSprite | PIXI.Sprite,
   {
     worldSize: Size;
@@ -23,6 +24,15 @@ export const Character = React.forwardRef<
     interactives,
   });
 
+  const activeObstacle = useAppDataStore((state) => state.activeObstacle);
+  if (activeObstacle) {
+    console.log('🪵 | Character | activeObstacle:', activeObstacle);
+  }
+  const interactiveItem = useAppDataStore((state) => state.interactiveItem);
+  if (interactiveItem) {
+    console.log('🪵 | Character | interactiveItem:', interactiveItem);
+  }
+
   return (
     <>
       <Text
@@ -36,6 +46,19 @@ export const Character = React.forwardRef<
           })
         }
       />
+      {interactiveItem && (
+        <Text
+          text={JSON.stringify(interactiveItem.action, null, 2)}
+          x={position.x - PLAYER_SIZE.width - 40}
+          y={position.y + 70}
+          style={
+            new TextStyle({
+              align: 'center',
+              fontSize: 48,
+            })
+          }
+        />
+      )}
       <AnimatedSprite
         ref={ref as LegacyRef<PIXI.AnimatedSprite>}
         direction={direction}

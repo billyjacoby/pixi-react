@@ -21,9 +21,22 @@ export type CollidableItem = Coords &
   };
 
 export type InteractiveAction = {
-  name: string;
+  action: () => void;
+  label: string;
+  hotKey?: string;
 };
 
 export type InteractiveItem = CollidableItem & {
   action: InteractiveAction;
+};
+
+export type PlayerState = 'idle' | 'walking';
+
+export type PlayerDirection = 'left' | 'right';
+
+export type Level = {
+  name: string;
+  theme: 'basic';
+  tileset: string;
+  obstacles: string;
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import { PLAYER_SIZE } from '../lib/constants';
-import { CollidableItem, Coords, InteractiveItem } from '../types';
+import { Coords } from '../types';
 
 const PLAYER_SIZE_BUFFER = -0.3;
 const BUFFERED_PLAYER_SIZE = {
@@ -33,41 +33,58 @@ function checkItemOverlap(itemOne: Position, itemTwo: Position) {
   return false;
 }
 
-export const useCheckCollision = (
-  obstacles: CollidableItem[],
-  interactives: InteractiveItem[]
+export const useCheckItemHit = <
+  T extends { x: number; y: number; width: number; height: number }
+>(
+  items: T[]
 ) => {
   //TODO: this can likely be optimized, but it works for now.
   //? thinking maybe doing this quadrant based, only checking items in the same quadrant as the character could make this far more performant
-  const checkCollision = React.useCallback(
-    ({ x, y }: Coords): boolean => {
+  const checkItemHit = React.useCallback(
+    (
+      { x, y }: Coords,
+      onComplete?: (item?: T) => void
+    ): { isHit: true; item: T } | { isHit: false; item: undefined } => {
       // Calculate the character's bounding box
       const characterLeft = x - BUFFERED_PLAYER_SIZE.width / 2;
       const characterTop = y - BUFFERED_PLAYER_SIZE.height / 2;
       const characterRight = x + BUFFERED_PLAYER_SIZE.width / 2;
       const characterBottom = y + BUFFERED_PLAYER_SIZE.height / 2;
 
-      for (const item of obstacles) {
+      for (const item of items) {
         const itemRight = item.x + item.width;
         const itemLeft = item.x;
         const itemBottom = item.y + item.height;
         const itemTop = item.y;
 
-        const isColliding = checkItemOverlap(
-          {
-            top: characterTop,
-            left: characterLeft,
-            right: characterRight,
-            bottom: characterBottom,
-          },
-          { top: itemTop, left: itemLeft, right: itemRight, bottom: itemBottom }
-        );
-        if (isColliding) return true;
+        const itemOne = {
+          top: characterTop,
+          left: characterLeft,
+          right: characterRight,
+          bottom: characterBottom,
+        };
+
+        const obstacle = {
+          top: itemTop,
+          left: itemLeft,
+          right: itemRight,
+          bottom: itemBottom,
+        };
+
+        const isItemHit = checkItemOverlap(itemOne, obstacle);
+        if (isItemHit) {
+          onComplete?.(item);
+          return {
+            isHit: true,
+            item,
+          };
+        }
       }
-      return false;
+      onComplete?.();
+      return { isHit: false, item: undefined };
     },
-    [obstacles, interactives]
+    [items]
   );
 
-  return { checkCollision };
+  return { checkItemHit };
 };

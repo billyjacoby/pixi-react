@@ -1,6 +1,6 @@
 import React from 'react';
 import { Sprite } from '@pixi/react';
-import { Grid, InteractiveItem } from '../types';
+import { InteractiveItem } from '../types';
 import {
   cellToAssetNameMap,
   cellToAssetNameMapKey,
@@ -8,23 +8,31 @@ import {
   interactiveActions,
   interactiveCells,
   InteractiveCellValue,
+  levels,
 } from '../lib/map';
 import * as PIXI from 'pixi.js';
+import { gridFromString } from '@/lib/grid-utils';
+import { useAppDataStore } from '@/stores/appData';
 
 const PERSPECTIVE_HEIGHT_RATIO = 0.3;
 
 export function Interactives({
-  grid,
+  interactiveItems,
   setInterActiveItems,
 }: {
-  grid: Grid;
+  interactiveItems: InteractiveItem[];
   setInterActiveItems: React.Dispatch<React.SetStateAction<InteractiveItem[]>>;
 }) {
   const [children, setChildren] = React.useState<any[]>([]);
+
+  const currentLevelIndex = useAppDataStore((state) => state.currentLevelIndex);
+
+  const grid = gridFromString(levels[currentLevelIndex].obstacles);
+
   async function loadInteractives() {
     await PIXI.Assets.load('/tilemaps/assets.json');
     let newChildren: any[] = [];
-    const interactiveItems: InteractiveItem[] = [];
+    const newInteractiveItems: InteractiveItem[] = [];
     grid.forEach((row, y) =>
       row.map((cell, x) => {
         if (!interactiveCells.includes(cell as InteractiveCellValue))
@@ -50,7 +58,7 @@ export function Interactives({
           />
         );
 
-        interactiveItems.push({
+        newInteractiveItems.push({
           x: x * GRID_CELL_SIZE,
           y: y * GRID_CELL_SIZE,
           width: itemTexture.width,
@@ -62,13 +70,21 @@ export function Interactives({
         return children;
       })
     );
-    setInterActiveItems(interactiveItems);
+    setInterActiveItems(newInteractiveItems);
     setChildren(newChildren);
+    //? Cleanup old Sprites
+    if (interactiveItems && interactiveItems.length > 0) {
+      setTimeout(() => {
+        for (const interactive of interactiveItems) {
+          interactive.ref.current?.destroy();
+        }
+      });
+    }
   }
 
   React.useEffect(() => {
     loadInteractives();
-  }, []);
+  }, [currentLevelIndex]);
 
   if (children.length === 0) {
     return null;

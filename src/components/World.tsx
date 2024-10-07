@@ -3,14 +3,14 @@ import { useTick } from '@pixi/react';
 import PixiViewportComponent from '../lib/components/ViewportComponent';
 import { Viewport } from 'pixi-viewport';
 import * as PIXI from 'pixi.js';
-import { Character } from './Character';
-import { Explosion } from './Explosion';
-import { GRID_CELL_SIZE, levels } from '../lib/map';
+import { Player } from './Player';
+import { GRID_CELL_SIZE } from '../lib/map';
 import { gridFromString } from '../lib/grid-utils';
 import { useTilemap } from '../hooks/useTilemap';
 import { CollidableItem, InteractiveItem } from '../types';
 import { Obstacles } from './Obstacles';
 import { Interactives } from './Interactives';
+import { useAppDataStore } from '@/stores/appData';
 
 interface WorldProps {
   stageSize: { width: number; height: number };
@@ -25,8 +25,8 @@ export const World: React.FC<WorldProps> = ({ stageSize }) => {
     InteractiveItem[]
   >([]);
 
-  const [currentLevelIndex] = React.useState(0);
-  const currentLevel = levels[currentLevelIndex];
+  const currentLevel = useAppDataStore((state) => state.currentLevel);
+  console.log('🪵 | currentLevel:', currentLevel);
 
   const tileGrid = gridFromString(currentLevel.tileset);
   const obstacleGrid = gridFromString(currentLevel.obstacles);
@@ -49,6 +49,11 @@ export const World: React.FC<WorldProps> = ({ stageSize }) => {
     }
   });
 
+  React.useEffect(() => {
+    console.log('🪵 | currentLevel:', currentLevel);
+    //? Handle reset of the player and level here
+  }, [currentLevel]);
+
   if (!tileMap) {
     console.log('loading...');
     return null;
@@ -62,18 +67,17 @@ export const World: React.FC<WorldProps> = ({ stageSize }) => {
       tileMap={tileMap}
     >
       <Interactives
-        grid={obstacleGrid}
         setInterActiveItems={setInterActiveItems}
+        interactiveItems={interactiveItems}
       />
-      <Character
+      <Player
         ref={spriteRef}
         worldSize={worldSize}
         grid={tileGrid}
         obstacles={obstacles}
         interactives={interactiveItems}
       />
-      <Explosion />
-      <Obstacles grid={obstacleGrid} setObstacles={setObstacles} />
+      <Obstacles obstacles={obstacles} setObstacles={setObstacles} />
     </PixiViewportComponent>
   );
 };

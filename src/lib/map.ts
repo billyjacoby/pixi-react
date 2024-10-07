@@ -15,13 +15,14 @@
  * C = cylinder building guy
  */
 
-import { GridCell, InteractiveAction } from '../types';
+import { useAppDataStore } from '@/stores/appData';
+import { GridCell, InteractiveAction, Level } from '../types';
 
 export const BLOCKING_ITEMS = '1' as GridCell;
 
 export const GRID_CELL_SIZE = 256;
 
-export const levels = [
+export const levels: Level[] = [
   {
     name: 'Level 1',
     theme: 'basic',
@@ -66,8 +67,8 @@ export const levels = [
     0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
     0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
     0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    0 0 0 0 0 0 0 0 0 0 0 0 E 0 0
     0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-    0 0 0 0 0 0 0 0 0 0 0 0 0 0 E
     `,
   },
 ];
@@ -82,10 +83,14 @@ export const interactiveActions: Record<
   InteractiveAction
 > = {
   S: {
-    name: 'SIGN',
+    action: () => useAppDataStore.getState().SIGN(),
+    label: 'Return to previous level',
+    hotKey: 'e',
   },
   E: {
-    name: 'EXIT',
+    action: () => useAppDataStore.getState().NEXT_LEVEL(),
+    label: 'Proceed to next level',
+    hotKey: 'e',
   },
 };
 
