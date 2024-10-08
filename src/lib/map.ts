@@ -39,12 +39,12 @@ export const levels: Level[] = [
     obstacles: `
     0 0 0 0 0 0 0 0 0 0 0 0 0 H 0
     0 S 4 0 0 0 0 4 0 0 0 0 0 0 0
-    0 0 0 0 0 0 0 4 0 0 0 0 4 0 0
+    0 0 0 0 0 0 T 0 0 0 0 0 4 0 0
     0 0 0 0 0 0 0 0 0 0 4 0 0 4 0 
     0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-    0 0 0 0 0 0 0 0 0 4 0 0 4 0 0
-    0 H 0 0 0 0 0 0 0 0 0 0 4 0 0
-    0 0 0 0 0 0 0 0 4 4 0 0 4 0 E
+    0 0 0 0 0 0 0 0 0 0 0 F 0 0 0
+    0 I 0 0 0 0 0 0 0 0 0 0 0 0 0
+    T 0 0 0 0 0 0 0 4 4 0 0 4 0 E
     `,
   },
   {
@@ -64,7 +64,7 @@ export const levels: Level[] = [
     0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
     0 S 0 0 0 0 0 0 0 0 0 0 0 0 0
     0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-    0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    0 0 0 0 0 I 0 0 0 0 0 0 0 0 0
     0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
     0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
     0 0 0 0 0 0 0 0 0 0 0 0 E 0 0
@@ -73,7 +73,7 @@ export const levels: Level[] = [
   },
 ];
 
-export const obstacleCells = ['4', 'C', 'R'] as const;
+export const obstacleCells = ['4', 'C', 'R', 'H', 'T', 'F', 'I'] as const;
 export type ObstacleCellValue = (typeof obstacleCells)[number];
 export const interactiveCells = ['S', 'E'] as const;
 export type InteractiveCellValue = (typeof interactiveCells)[number];
@@ -104,8 +104,11 @@ export type cellToTileMapKey = keyof typeof cellToTileMap;
 
 export const cellToAssetNameMap = {
   S: 'sign.png',
-  E: 'exit.png',
+  E: 'portal.png',
   '4': ['stones_1.png', 'stones_2.png', 'stones_3.png', 'stones_4.png'],
-  H: 'cylinder_building.png',
+  H: 'building_1.png',
+  I: 'building_2.png',
+  T: ['tree_1.png', 'tree_2.png'],
+  F: 'stone-face.png',
 } as const;
 export type cellToAssetNameMapKey = keyof typeof cellToAssetNameMap;

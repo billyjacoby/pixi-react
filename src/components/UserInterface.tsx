@@ -12,7 +12,7 @@ export function UserInterface() {
 
   function handleKeyPress(e: KeyboardEvent) {
     if (e.key === hotKey) {
-      interactiveItem?.action.action();
+      interactiveItem?.action.action?.();
     }
   }
 
@@ -48,7 +48,7 @@ export function UserInterface() {
       <Button
         onClick={() => {
           if (isAvailable) {
-            interactiveItem.action.action();
+            interactiveItem.action.action?.();
           }
         }}
       >
