@@ -84,11 +84,14 @@ export const interactiveActions: Record<
 > = {
   S: {
     action: () => useAppDataStore.getState().SIGN(),
+    isDisabled: () => useAppDataStore.getState().currentLevelIndex <= 0,
     label: 'Return to previous level',
     hotKey: 'e',
   },
   E: {
     action: () => useAppDataStore.getState().NEXT_LEVEL(),
+    isDisabled: () =>
+      useAppDataStore.getState().currentLevelIndex >= levels.length - 1,
     label: 'Proceed to next level',
     hotKey: 'e',
   },

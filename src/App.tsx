@@ -35,11 +35,7 @@ const App = () => {
   return (
     <div className="app-container">
       <div className="relative">
-        <Stage
-          width={stageSize.width}
-          height={stageSize.height}
-          options={{ backgroundColor: 0x1099bb }}
-        >
+        <Stage width={stageSize.width} height={stageSize.height}>
           <World stageSize={stageSize} />
         </Stage>
         <div className="absolute bottom-1/2 md:bottom-10 left-1/2 -translate-x-1/2">

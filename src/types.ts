@@ -22,6 +22,7 @@ export type CollidableItem = Coords &
 
 export type InteractiveAction = {
   action: () => void;
+  isDisabled?: () => boolean;
   label: string;
   hotKey?: string;
 };

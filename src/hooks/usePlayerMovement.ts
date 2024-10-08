@@ -120,6 +120,10 @@ export const usePlayerMovement = ({
 
     let speed = SPEED;
 
+    if (keysPressed.current.has('shift')) {
+      speed = MAX_SPEED;
+    }
+
     // Touch movement logic
     if (initialTouchPosition && currentTouchPosition) {
       const touchDx = currentTouchPosition.x - initialTouchPosition.x;
