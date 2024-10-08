@@ -37,13 +37,13 @@ export const levels: Level[] = [
     0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
     `,
     obstacles: `
-    0 0 0 0 0 0 0 0 0 0 0 0 0 C 0
+    0 0 0 0 0 0 0 0 0 0 0 0 0 H 0
     0 S 4 0 0 0 0 4 0 0 0 0 0 0 0
     0 0 0 0 0 0 0 4 0 0 0 0 4 0 0
     0 0 0 0 0 0 0 0 0 0 4 0 0 4 0 
     0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
     0 0 0 0 0 0 0 0 0 4 0 0 4 0 0
-    0 C 0 0 0 0 0 0 0 0 0 0 4 0 0
+    0 H 0 0 0 0 0 0 0 0 0 0 4 0 0
     0 0 0 0 0 0 0 0 4 4 0 0 4 0 E
     `,
   },
@@ -106,7 +106,6 @@ export const cellToAssetNameMap = {
   S: 'sign.png',
   E: 'exit.png',
   '4': ['stones_1.png', 'stones_2.png', 'stones_3.png', 'stones_4.png'],
-  R: 'round_building.png',
-  C: 'cylinder_building.png',
+  H: 'cylinder_building.png',
 } as const;
 export type cellToAssetNameMapKey = keyof typeof cellToAssetNameMap;

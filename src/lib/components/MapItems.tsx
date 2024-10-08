@@ -11,7 +11,7 @@ import {
 } from '../map';
 import * as PIXI from 'pixi.js';
 import { CollidableItem, Grid } from '../../types';
-import { PERSPECTIVE_HEIGHT_RATIO } from '@/lib/constants';
+import { ASSET_PATH, PERSPECTIVE_HEIGHT_RATIO } from '@/constants';
 import { gridFromString } from '@/lib/grid-utils';
 import { useAppDataStore } from '@/stores/appData';
 
@@ -33,7 +33,7 @@ export function MapItems<T extends CollidableItem>({
   grid = gridFromString(levels[currentLevelIndex].obstacles);
 
   async function loadItems() {
-    await PIXI.Assets.load('/tilemaps/assets.json');
+    await PIXI.Assets.load(ASSET_PATH);
     let newChildren: any[] = [];
     const newItems: any[] = [];
 
@@ -58,6 +58,8 @@ export function MapItems<T extends CollidableItem>({
             x={x * GRID_CELL_SIZE}
             y={y * GRID_CELL_SIZE}
             name={`item-${x}-${y}`}
+            width={itemTexture.width}
+            height={itemTexture.height}
           />
         );
 

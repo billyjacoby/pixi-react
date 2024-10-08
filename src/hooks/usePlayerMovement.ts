@@ -1,5 +1,5 @@
 import React from 'react';
-import { PLAYER_SIZE } from '../lib/constants';
+import { PLAYER_SIZE } from '../constants';
 import {
   DOWN_KEYS,
   LEFT_KEYS,

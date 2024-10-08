@@ -5,7 +5,7 @@ import { Grid, Size } from '../types';
 import { Text } from '@pixi/react';
 import { TextStyle } from 'pixi.js';
 import { AnimatedSprite } from '../lib/components/AnimatedSprite';
-import { DEBUG, PLAYER_SIZE } from '../lib/constants';
+import { DEBUG, PLAYER_SIZE } from '../constants';
 import { useAppDataStore } from '../stores/appData';
 
 export const Player = React.forwardRef<

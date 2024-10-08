@@ -1,5 +1,5 @@
 import React from 'react';
-import { PLAYER_SIZE } from '../lib/constants';
+import { PLAYER_SIZE } from '../constants';
 import { Coords } from '../types';
 
 const PLAYER_SIZE_BUFFER = -0.3;
