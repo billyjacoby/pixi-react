@@ -1,12 +1,15 @@
-import React from 'react';
-import './App.css';
 import { Stage } from '@pixi/react';
-import { World } from './components/World';
+import React from 'react';
 import { DESKTOP_SIZE } from '../constants';
+import './App.css';
 import { UserInterface } from './components/UserInterface';
+import { World } from './components/World';
+import MapEditor from './components/screens/MapEditor';
 
 const App = () => {
   const [stageSize, setStageSize] = React.useState({ width: 800, height: 600 });
+
+  const pageName = window.location.pathname.split('/').pop();
 
   React.useEffect(() => {
     const handleResize = () => {
@@ -31,6 +34,10 @@ const App = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  if (pageName === 'map') {
+    return <MapEditor/>;
+  }
 
   return (
     <div className="app-container">
